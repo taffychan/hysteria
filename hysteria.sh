@@ -83,8 +83,8 @@ install_base() {
 
 downloadHysteria() {
     rm -f /usr/local/bin/hysteria
-    rm -rf /root/Hysteria
-    mkdir /root/Hysteria
+    rm -rf /etc/hysteria
+    mkdir /etc/hysteria
     last_version=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ ! -n "$last_version" ]]; then
         red "检测 Hysteria 版本失败，可能是网络错误，请稍后再试"
@@ -116,15 +116,15 @@ makeConfig() {
     ulimit -n 1048576 && ulimit -u unlimited
     openssl ecparam -genkey -name prime256v1 -out /root/Hysteria/private.key
     openssl req -new -x509 -days 36500 -key /root/Hysteria/private.key -out /root/Hysteria/cert.crt -subj "/CN=www.bilibili.com"
-    cat <<EOF > /root/Hysteria/server.json
+    cat <<EOF > /etc/hysteria/server.json
 {
     "listen": ":$PORT",
-    "cert": "/root/Hysteria/cert.crt",
-    "key": "/root/Hysteria/private.key",
+    "cert": "/etc/hysteria/cert.crt",
+    "key": "/etc/hysteria/private.key",
     "obfs": "$OBFS"
 }
 EOF
-    cat <<EOF > /root/Hysteria/client.json
+    cat <<EOF > /root/hysteria/client.json
 {
     "server": "$IP:$PORT",
     "obfs": "$OBFS",
@@ -139,7 +139,7 @@ EOF
     }
 }
 EOF
-    cat <<EOF > /root/Hysteria/v2rayn.json
+    cat <<EOF > /etc/hysteria/v2rayn.json
 {
     "server": "$IP:$PORT",
     "obfs": "$OBFS",
@@ -168,8 +168,8 @@ WantedBy=multi-user.target
 
 [Service]
 Type=simple
-WorkingDirectory=/root/Hysteria
-ExecStart=/usr/bin/hysteria -c /root/Hysteria/server.json server
+WorkingDirectory=/etc/hysteria
+ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/server.json server
 Restart=always
 TEXT
     url="hysteria://$IP:$PORT?auth=$OBFS&upmbps=200&downmbps=1000&obfs=xplus&obfsParam=$OBFS"
@@ -223,8 +223,8 @@ installHysteria() {
     fi
     install_base
     downloadHysteria
-    read -rp "是否安装BBR（y/n，默认n）：" INSTALL_BBR_YN
-    if [[ $INSTALL_BBR_YN =~ "y"|"Y" ]]; then
+    read -rp "是否安装BBR（y/n，默认n）：" YN
+    if [[ $YN =~ "y"|"Y" ]]; then
         installBBR
     fi
     makeConfig
@@ -236,8 +236,8 @@ installHysteria() {
     elif [[ -n $(service hysteria status 2>/dev/null | grep "active") ]]; then
         show_usage
         green "Hysteria 服务器安装成功"
-        yellow "服务器配置文件已保存到 /root/Hysteria/server.json"
-        yellow "客户端配置文件已保存到 /root/Hysteria/client.json"
+        yellow "服务器配置文件已保存到 /etc/hysteria/server.json"
+        yellow "客户端配置文件已保存到 /etc/hysteria/client.json"
         yellow "V2rayN 代理规则分流配置文件已保存到 /root/Hysteria/v2rayn.json"
         yellow "SagerNet / ShadowRocket 分享链接: "
         green "$url"
