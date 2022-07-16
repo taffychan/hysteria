@@ -223,6 +223,7 @@ installBBR() {
 }
 
 installHysteria() {
+    install_base
     wgcfv6status=$(curl -s6m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2) 
     wgcfv4status=$(curl -s4m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
     if [[ $wgcfv4status =~ "on"|"plus" ]] || [[ $wgcfv6status =~ "on"|"plus" ]]; then
@@ -232,7 +233,6 @@ installHysteria() {
     else
         check_ip
     fi
-    install_base
     downloadHysteria
     read -rp "是否安装BBR（y/n，默认n）：" YN
     if [[ $YN =~ "y"|"Y" ]]; then
