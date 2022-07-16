@@ -133,10 +133,14 @@ EOF
     "down_mbps": 1000,
     "insecure": true,
     "socks5": {
-        "listen": "127.0.0.1:1080"
+        "listen": "127.0.0.1:1080",
+        "timeout" : 300,
+        "disable_udp": false
     },
     "http": {
-        "listen": "127.0.0.1:1081"
+        "listen": "127.0.0.1:1081",
+        "timeout" : 300,
+        "disable_udp": false
     }
 }
 EOF
