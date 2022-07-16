@@ -110,7 +110,7 @@ makeConfig() {
             fi
         done
     fi
-    read -rp "请输入 Hysteria 的连接混淆密码（默认随机生成）：" OBFS
+    read -rp "请输入 Hysteria 的连接混淆密码（默认随机32位密码）：" OBFS
     [[ -z $OBFS ]] && OBFS=$(date +%s%N | md5sum | cut -c 1-32)
     sysctl -w net.core.rmem_max=4000000
     ulimit -n 1048576 && ulimit -u unlimited
@@ -125,7 +125,7 @@ makeConfig() {
     "obfs": "$OBFS"
 }
 EOF
-    cat <<EOF > /etc/hysteria/hy-client.json
+    cat <<EOF > /root/hy-client.json
 {
     "server": "${IP}:${PORT}",
     "obfs": "$OBFS",
@@ -144,7 +144,7 @@ EOF
     }
 }
 EOF
-    cat <<EOF > /etc/hysteria/hy-v2rayn.json
+    cat <<EOF > /root/hy-v2rayn.json
 {
     "server": "${IP}:${PORT}",
     "obfs": "$OBFS",
@@ -182,8 +182,7 @@ ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/hy-server.json server
 Restart=always
 TEXT
     url="hysteria://$IP:$PORT?auth=$OBFS&upmbps=200&downmbps=1000&obfs=xplus&obfsParam=$OBFS"
-    cp /etc/hysteria/hy-client.json /root/hy-client.json
-    cp /etc/hysteria/hy-v2rayn.json /root/hy-v2rayn.json
+    echo ${url} > /root/hy-url.txt
 }
 
 installBBR() {
