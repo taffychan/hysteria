@@ -336,7 +336,7 @@ closeipv6() {
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1" >>/etc/sysctl.d/99-sysctl.conf
     sysctl --system
-    green "禁用IPv6结束，可能需要重启！"
+    green "禁用IPv6结束，可能需要重启VPS系统！"
 }
 
 #开启IPv6
@@ -351,7 +351,7 @@ openipv6() {
 net.ipv6.conf.default.disable_ipv6 = 0
 net.ipv6.conf.lo.disable_ipv6 = 0" >>/etc/sysctl.d/99-sysctl.conf
     sysctl --system
-    green "开启IPv6结束，可能需要重启！"
+    green "开启IPv6结束，可能需要重启VPS系统！"
 }
 
 show_usage(){
