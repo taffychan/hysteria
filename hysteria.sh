@@ -82,10 +82,9 @@ install_base() {
 }
 
 downloadHysteria() {
-    rm -f /usr/bin/hysteria
+    rm -f /usr/local/bin/hysteria
     rm -rf /root/Hysteria
     mkdir /root/Hysteria
-    ## last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     last_version=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ ! -n "$last_version" ]]; then
         red "检测 Hysteria 版本失败，可能是网络错误，请稍后再试"
