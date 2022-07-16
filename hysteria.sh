@@ -263,9 +263,14 @@ stop_hysteria() {
     green "Hysteria 已停止！"
 }
 
-restart(){
+restart_hysteria(){
     systemctl restart hysteria
     green "Hysteria 已重启！"
+}
+
+update_hysteria(){
+    latestVer=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
+    localVer=$(/usr/local/bin/hysteria -v | awk 'NR==1 {print $3}')
 }
 
 view_log(){
@@ -381,7 +386,7 @@ menu() {
         1) installHysteria ;;
         2) uninstall ;;
         3) start_hysteria ;;
-        4) restart ;;
+        4) restart_hysteria ;;
         5) stop_hysteria ;;
         6) view_log ;;
         7) openipv6 ;;
@@ -402,7 +407,7 @@ if [[ $# > 0 ]]; then
         uninstall ) uninstall ;;
         on ) start_hysteria ;;
         off ) stop_hysteria ;;
-        restart ) restart ;;
+        restart ) restart_hysteria ;;
         log ) view_log ;;
         * ) show_usage ;;
     esac
