@@ -275,7 +275,12 @@ update_hysteria(){
     if [[ $latestVer == $localVer ]]; then
         red "您当前运行的 Hysteria 内核为最新版本，不必再次更新！"
     else
-        echo ""
+        systemctl stop hysteria
+        rm -f /usr/local/bin/hysteria
+        wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/v${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
+        chmod +x /usr/local/bin/hysteria
+        systemctl start hysteria
+        green "Hysteria 内核已更新到最新版本！"
     fi
 }
 
