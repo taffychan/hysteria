@@ -275,7 +275,7 @@ update_hysteria(){
     if [[ $latestVer == $localVer ]]; then
         red "您当前运行的 Hysteria 内核为最新版本，不必再次更新！"
     else
-        
+        echo ""
     fi
 }
 
