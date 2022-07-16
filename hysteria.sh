@@ -389,7 +389,7 @@ menu() {
     echo " -------------"
     echo -e "  ${GREEN}8.${PLAIN}  启用IPv6"
     echo -e "  ${GREEN}9.${PLAIN}  禁用IPv6"
-    echo -e "  ${GREEN}10.${PLAIN}  放行防火墙端口"
+    echo -e "  ${GREEN}10.${PLAIN} 放行防火墙端口"
     echo " -------------"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo ""
