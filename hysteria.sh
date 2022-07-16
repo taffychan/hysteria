@@ -118,7 +118,7 @@ makeConfig() {
     openssl req -new -x509 -days 36500 -key /etc/hysteria/private.key -out /etc/hysteria/cert.crt -subj "/CN=www.baidu.com"
     cat <<EOF > /etc/hysteria/hy-server.json
 {
-    "listen": ":$PORT",
+    "listen": ":${PORT}",
     "resolve_preference": "46",
     "cert": "/etc/hysteria/cert.crt",
     "key": "/etc/hysteria/private.key",
@@ -127,7 +127,7 @@ makeConfig() {
 EOF
     cat <<EOF > /etc/hysteria/hy-client.json
 {
-    "server": "$IP:$PORT",
+    "server": "${IP}:${PORT}",
     "obfs": "$OBFS",
     "up_mbps": 200,
     "down_mbps": 1000,
@@ -146,7 +146,7 @@ EOF
 EOF
     cat <<EOF > /etc/hysteria/hy-v2rayn.json
 {
-    "server": "$IP:$PORT",
+    "server": "${IP}:${PORT}",
     "obfs": "$OBFS",
     "up_mbps": 200,
     "down_mbps": 1000,
