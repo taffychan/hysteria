@@ -41,11 +41,13 @@ done
 
 [[ $EUID -ne 0 ]] && red "请在root用户下运行脚本" && exit 1
 
-IP=$(curl -s6m8 ip.sb) || IP=$(curl -s4m8 ip.sb)
+check_ip(){
+    IP=$(curl -s6m8 ip.gs) || IP=$(curl -s4m8 ip.gs)
 
-if [[ -n $(echo $IP | grep ":") ]]; then
-    IP="[$IP]"
-fi
+    if [[ -n $(echo $IP | grep ":") ]]; then
+        IP="[$IP]"
+    fi
+}
 
 check_tun(){
     TUN=$(cat /dev/net/tun 2>&1 | tr '[:upper:]' '[:lower:]')
@@ -211,6 +213,15 @@ installBBR() {
 }
 
 installHysteria() {
+    wgcfv6status=$(curl -s6m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2) 
+    wgcfv4status=$(curl -s4m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+    if [[ $wgcfv4status =~ "on"|"plus" ]] || [[ $wgcfv6status =~ "on"|"plus" ]]; then
+        wg-quick down wgcf >/dev/null 2>&1
+        check_ip
+        wg-quick up wgcf >/dev/null 2>&1
+    else
+        check_ip
+    fi
     install_base
     downloadHysteria
     read -rp "是否安装BBR（y/n，默认n）：" INSTALL_BBR_YN
