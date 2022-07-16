@@ -96,7 +96,7 @@ downloadHysteria() {
         red "下载 Hysteria 失败，请确保你的服务器能够连接并下载 Github 的文件"
         exit 1
     fi
-    chmod +x /usr/bin/hysteria
+    chmod +x /usr/local/bin/hysteria
 }
 
 makeConfig() {
@@ -116,7 +116,7 @@ makeConfig() {
     ulimit -n 1048576 && ulimit -u unlimited
     openssl ecparam -genkey -name prime256v1 -out /root/Hysteria/private.key
     openssl req -new -x509 -days 36500 -key /root/Hysteria/private.key -out /root/Hysteria/cert.crt -subj "/CN=www.bilibili.com"
-    cat <<EOF > /etc/hysteria/server.json
+    cat <<EOF > /etc/hysteria/hy-server.json
 {
     "listen": ":$PORT",
     "resolve_preference": "46",
@@ -125,7 +125,7 @@ makeConfig() {
     "obfs": "$OBFS"
 }
 EOF
-    cat <<EOF > /root/hysteria/client.json
+    cat <<EOF > /etc/hysteria/hy-client.json
 {
     "server": "$IP:$PORT",
     "obfs": "$OBFS",
@@ -144,7 +144,7 @@ EOF
     }
 }
 EOF
-    cat <<EOF > /etc/hysteria/v2rayn.json
+    cat <<EOF > /etc/hysteria/hy-v2rayn.json
 {
     "server": "$IP:$PORT",
     "obfs": "$OBFS",
@@ -178,10 +178,12 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=/etc/hysteria
-ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/server.json server
+ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/hy-server.json server
 Restart=always
 TEXT
     url="hysteria://$IP:$PORT?auth=$OBFS&upmbps=200&downmbps=1000&obfs=xplus&obfsParam=$OBFS"
+    cp /etc/hysteria/hy-client.json /root/hy-client.json
+    cp /etc/hysteria/hy-v2rayn.json /root/hy-v2rayn.json
 }
 
 installBBR() {
@@ -245,9 +247,8 @@ installHysteria() {
     elif [[ -n $(service hysteria status 2>/dev/null | grep "active") ]]; then
         show_usage
         green "Hysteria 服务器安装成功"
-        yellow "服务器配置文件已保存到 /etc/hysteria/server.json"
-        yellow "客户端配置文件已保存到 /etc/hysteria/client.json"
-        yellow "V2rayN 代理规则分流配置文件已保存到 /root/Hysteria/v2rayn.json"
+        yellow "Hysteria 客户端配置文件已保存到 /root/hy-client.json"
+        yellow "V2rayN 代理规则分流配置文件已保存到 /root/hy-v2rayn.json"
         yellow "SagerNet / ShadowRocket 分享链接: "
         green "$url"
     fi
