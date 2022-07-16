@@ -152,10 +152,14 @@ EOF
     "retry": 3,
     "retry_interval": 5,
     "socks5": {
-        "listen": "127.0.0.1:10808"
+        "listen": "127.0.0.1:10808",
+        "timeout" : 300,
+        "disable_udp": false
     },
     "http": {
-        "listen": "127.0.0.1:10809"
+        "listen": "127.0.0.1:10809",
+        "timeout" : 300,
+        "disable_udp": false
     }
 }
 EOF
