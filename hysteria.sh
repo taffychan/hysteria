@@ -360,6 +360,7 @@ show_usage(){
     echo "hy              - 显示管理菜单 (功能更多)"
     echo "hy install      - 安装 Hysteria"
     echo "hy uninstall    - 卸载 Hysteria"
+    echo "hy update       - 更新 Hysteria 内核"
     echo "hy on           - 启动 Hysteria"
     echo "hy off          - 关闭 Hysteria"
     echo "hy restart      - 重启 Hysteria"
@@ -376,18 +377,19 @@ menu() {
     echo -e "# ${GREEN}GitHub${PLAIN}: https://github.com/taffychan                      #"
     echo "#############################################################"
     echo ""
-    echo -e "  ${GREEN}1.${PLAIN}  安装Hysieria"
-    echo -e "  ${GREEN}2.${PLAIN}  ${RED}卸载Hysieria${PLAIN}"
+    echo -e "  ${GREEN}1.${PLAIN}  安装 Hysieria"
+    echo -e "  ${GREEN}2.${PLAIN}  ${RED}卸载 Hysieria${PLAIN}"
     echo " -------------"
-    echo -e "  ${GREEN}3.${PLAIN}  启动Hysieria"
-    echo -e "  ${GREEN}4.${PLAIN}  重启Hysieria"
-    echo -e "  ${GREEN}5.${PLAIN}  停止Hysieria"
+    echo -e "  ${GREEN}3.${PLAIN}  启动 Hysieria"
+    echo -e "  ${GREEN}4.${PLAIN}  重启 Hysieria"
+    echo -e "  ${GREEN}5.${PLAIN}  停止 Hysieria"
+    echo -e "  ${GREEN}6.${PLAIN}  更新 Hysieria 内核"
     echo " -------------"
-    echo -e "  ${GREEN}6.${PLAIN}  查看Hysieria运行日志"
+    echo -e "  ${GREEN}7.${PLAIN}  查看 Hysieria 运行日志"
     echo " -------------"
-    echo -e "  ${GREEN}7.${PLAIN}  启用IPv6"
-    echo -e "  ${GREEN}8.${PLAIN}  禁用IPv6"
-    echo -e "  ${GREEN}9.${PLAIN}  放行防火墙端口"
+    echo -e "  ${GREEN}8.${PLAIN}  启用IPv6"
+    echo -e "  ${GREEN}9.${PLAIN}  禁用IPv6"
+    echo -e "  ${GREEN}10.${PLAIN}  放行防火墙端口"
     echo " -------------"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo ""
@@ -400,10 +402,11 @@ menu() {
         3) start_hysteria ;;
         4) restart_hysteria ;;
         5) stop_hysteria ;;
-        6) view_log ;;
-        7) openipv6 ;;
-        8) closeipv6 ;;
-        9) open_ports ;;
+        6) update_hysteria ;;
+        7) view_log ;;
+        8) openipv6 ;;
+        9) closeipv6 ;;
+        10) open_ports ;;
         *) red "请选择正确的操作！" && exit 1 ;;
     esac
 }
@@ -417,6 +420,7 @@ if [[ $# > 0 ]]; then
     case $1 in
         install ) installHysteria ;;
         uninstall ) uninstall ;;
+        update ) update_hysteria ;;
         on ) start_hysteria ;;
         off ) stop_hysteria ;;
         restart ) restart_hysteria ;;
