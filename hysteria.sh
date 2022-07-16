@@ -119,6 +119,7 @@ makeConfig() {
     cat <<EOF > /etc/hysteria/server.json
 {
     "listen": ":$PORT",
+    "resolve_preference": "46",
     "cert": "/etc/hysteria/cert.crt",
     "key": "/etc/hysteria/private.key",
     "obfs": "$OBFS"
