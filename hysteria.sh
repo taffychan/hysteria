@@ -272,6 +272,11 @@ restart_hysteria(){
 update_hysteria(){
     latestVer=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     localVer=$(/usr/local/bin/hysteria -v | awk 'NR==1 {print $3}')
+    if [[ $latestVer == $localVer ]]; then
+        red "您当前运行的 Hysteria 内核为最新版本，不必再次更新！"
+    else
+        
+    fi
 }
 
 view_log(){
