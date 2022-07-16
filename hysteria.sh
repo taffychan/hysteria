@@ -102,9 +102,9 @@ downloadHysteria() {
 makeConfig() {
     read -rp "请输入 Hysteria 的连接端口（默认：40000）：" PORT
     [[ -z $PORT ]] && PORT=40000
-    if [[ -n $(netstat -ntlp | grep "$PORT") ]]; then
-        until [[ -z $(netstat -ntlp | grep "$PORT") ]]; do
-            if [[ -n $(netstat -ntlp | grep "$PORT") ]]; then
+    if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
+        until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; do
+            if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
                 yellow "你设置的端口目前已被占用，请重新输入端口"
                 read -rp "请输入 Hysteria 的连接端口（默认：40000）：" PORT
             fi
@@ -114,8 +114,8 @@ makeConfig() {
     [[ -z $OBFS ]] && OBFS=$(date +%s%N | md5sum | cut -c 1-32)
     sysctl -w net.core.rmem_max=4000000
     ulimit -n 1048576 && ulimit -u unlimited
-    openssl ecparam -genkey -name prime256v1 -out /root/Hysteria/private.key
-    openssl req -new -x509 -days 36500 -key /root/Hysteria/private.key -out /root/Hysteria/cert.crt -subj "/CN=www.bilibili.com"
+    openssl ecparam -genkey -name prime256v1 -out /etc/hysteria/private.key
+    openssl req -new -x509 -days 36500 -key /etc/hysteria/private.key -out /etc/hysteria/cert.crt -subj "/CN=www.bilibili.com"
     cat <<EOF > /etc/hysteria/hy-server.json
 {
     "listen": ":$PORT",
