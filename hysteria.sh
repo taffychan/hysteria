@@ -51,7 +51,7 @@ check_ip(){
 
 check_tun(){
     TUN=$(cat /dev/net/tun 2>&1 | tr '[:upper:]' '[:lower:]')
-    if [[ ! $TUN =~ 'in bad state' | '处于错误状态' | 'Die Dateizugriffsnummer ist in schlechter Verfassung' ]]; then
+    if [[ ! $TUN =~ "in bad state"|"处于错误状态"|"ist in schlechter Verfassung" ]]; then
         if [[ $vpsvirt == "openvz" ]]; then
             wget -N --no-check-certificate https://raw.githubusercontents.com/Misaka-blog/tun-script/master/tun.sh && bash tun.sh
         else
