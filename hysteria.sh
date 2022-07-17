@@ -248,7 +248,7 @@ installHysteria() {
         green "Hysteria 服务器安装成功"
         yellow "Hysteria 客户端配置文件已保存到 /root/hy-client.json"
         yellow "V2rayN 客户端配置文件已保存到 /root/hy-v2rayn.json"
-        yellow "SagerNet / ShadowRocket 分享链接: "
+        yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt"
         green "$url"
     fi
 }
