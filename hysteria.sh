@@ -39,7 +39,7 @@ for ((int = 0; int < ${#REGEX[@]}; int++)); do
     [[ $(echo "$SYS" | tr '[:upper:]' '[:lower:]') =~ ${REGEX[int]} ]] && SYSTEM="${RELEASE[int]}" && [[ -n $SYSTEM ]] && break
 done
 
-[[ $EUID -ne 0 ]] && red "请在root用户下运行脚本" && exit 1
+[[ $EUID -ne 0 ]] && red "注意：请在root用户下运行脚本" && exit 1
 
 check_ip(){
     IP=$(curl -s6m8 ip.gs) || IP=$(curl -s4m8 ip.gs)
@@ -90,7 +90,7 @@ downloadHysteria() {
     mkdir /etc/hysteria
     last_version=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ ! -n "$last_version" ]]; then
-        red "检测 Hysteria 版本失败，可能是网络错误，请稍后再试"
+        red "检测 Hysteria 版本失败，可能是网络问题，请稍后再试"
         exit 1
     fi
     yellow "检测到 Hysteria 最新版本：${last_version}，开始安装"
@@ -108,13 +108,16 @@ makeConfig() {
     if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
         until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; do
             if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
-                yellow "你设置的端口目前已被占用，请重新输入端口"
-                read -rp "请输入 Hysteria 的连接端口（默认：40000）：" PORT
+                yellow "你设置的端口目前已被其他程序占用，请重新设置一个新的端口"
+                read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " PORT
+                [[ -z $PORT ]] && PORT=$(shuf -i 1000-65535 -n 1)
             fi
         done
     fi
-    read -rp "请输入 Hysteria 的连接混淆密码（默认随机32位密码）：" OBFS
+    read -rp "请输入 Hysteria 的连接混淆密码 [默认随机生成]: " OBFS
     [[ -z $OBFS ]] && OBFS=$(date +%s%N | md5sum | cut -c 1-32)
+    yellow "正在生成配置文件，请稍等..."
+    sleep 2
     sysctl -w net.core.rmem_max=4000000
     ulimit -n 1048576 && ulimit -u unlimited
     openssl ecparam -genkey -name prime256v1 -out /etc/hysteria/private.key
@@ -236,7 +239,7 @@ installHysteria() {
         check_ip
     fi
     downloadHysteria
-    read -rp "是否安装BBR（y/n，默认n）：" YN
+    read -rp "是否安装BBR [Y/N]: " YN
     if [[ $YN =~ "y"|"Y" ]]; then
         installBBR
     fi
@@ -249,9 +252,9 @@ installHysteria() {
     elif [[ -n $(service hysteria status 2>/dev/null | grep "active") ]]; then
         show_usage
         green "Hysteria 服务器安装成功"
-        yellow "Hysteria 客户端配置文件已保存到 /root/hy-client.json"
-        yellow "V2rayN 客户端配置文件已保存到 /root/hy-v2rayn.json"
-        yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt"
+        yellow "Hysteria 官方客户端配置文件已保存到 /root/hy-client.json"
+        yellow "V2rayN 客户端规则配置文件已保存到 /root/hy-v2rayn.json"
+        yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt 文件中"
         green "$url"
     fi
 }
