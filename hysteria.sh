@@ -376,6 +376,8 @@ menu() {
     echo -e "# ${GREEN}GitHub${PLAIN}: https://github.com/taffychan                      #"
     echo "#############################################################"
     echo ""
+    yellow "注意：部分VPS服务器提供商有可能限制Hysteria协议的部署和使用，请谨慎部署"
+    echo ""
     echo -e "  ${GREEN}1.${PLAIN}  安装 Hysieria"
     echo -e "  ${GREEN}2.${PLAIN}  ${RED}卸载 Hysieria${PLAIN}"
     echo " -------------"
