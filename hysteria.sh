@@ -46,6 +46,9 @@ check_ip(){
 
     if [[ -n $(echo $IP | grep ":") ]]; then
         IP="[$IP]"
+        RIP=64
+    else
+        RIP=46
     fi
 }
 
@@ -119,7 +122,7 @@ makeConfig() {
     cat <<EOF > /etc/hysteria/config.json
 {
     "listen": ":${PORT}",
-    "resolve_preference": "46",
+    "resolve_preference": "${RIP}",
     "cert": "/etc/hysteria/cert.crt",
     "key": "/etc/hysteria/private.key",
     "obfs": "${OBFS}"
