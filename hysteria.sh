@@ -364,7 +364,7 @@ change_resolve(){
     read -rp "请选择优先级 [1-2]:" newResolve
     case $newResolve in
         1) newResolve="46" && sed -i "4s/$currResolve/$newResolve/g" /etc/hysteria/config.json && systemctl restart hysteria && green "更改IPv4 优先成功！" ;;
-        2) newResolve="64" && sed -i "4s/$currResolve/$newResolve/g" /etc/hysteria/config.json && systemctl restart hysteria && green "更改IPv4 优先成功！" ;;
+        2) newResolve="64" && sed -i "4s/$currResolve/$newResolve/g" /etc/hysteria/config.json && systemctl restart hysteria && green "更改IPv6 优先成功！" ;;
         *) red "请选择正确的操作！" && exit 1 ;;
     esac
 }
@@ -425,6 +425,7 @@ menu() {
         8) openipv6 ;;
         9) closeipv6 ;;
         10) open_ports ;;
+        11) change_resolve ;;
         *) red "请选择正确的操作！" && exit 1 ;;
     esac
 }
