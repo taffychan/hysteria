@@ -323,7 +323,7 @@ open_ports() {
     iptables -F 2>/dev/null
     iptables -X 2>/dev/null
     netfilter-persistent save 2>/dev/null
-    green "放开VPS网络防火墙端口成功！"
+    green "VPS网络防火墙端口已成功放行！"
 }
 
 #禁用IPv6
