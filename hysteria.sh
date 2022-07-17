@@ -356,6 +356,19 @@ net.ipv6.conf.lo.disable_ipv6 = 0" >>/etc/sysctl.d/99-sysctl.conf
     green "开启IPv6结束，可能需要重启VPS系统！"
 }
 
+change_resolve(){
+    currResolve=$(cat /etc/hysteria/config.json 2>/dev/null | grep resolve_preference | awk '{print $2}' | awk -F '"' '{ print $2}')
+    yellow "请选择IP优先级："
+    green "1. IPv4 优先"
+    green "2. IPv6 优先"
+    read -rp "请选择优先级 [1-2]:" newResolve
+    case $newResolve in
+        1) newResolve="46" && sed -i "4s/$currResolve/$newResolve/g" /etc/hysteria/config.json && systemctl restart hysteria && green "更改IPv4 优先成功！" ;;
+        2) newResolve="64" && sed -i "4s/$currResolve/$newResolve/g" /etc/hysteria/config.json && systemctl restart hysteria && green "更改IPv4 优先成功！" ;;
+        *) red "请选择正确的操作！" && exit 1 ;;
+    esac
+}
+
 show_usage(){
     echo "Hysteria 脚本快捷指令使用方法: "
     echo "------------------------------------------"
