@@ -293,16 +293,16 @@ uninstall(){
     rm -rf /etc/hysteria
     rm -f /usr/local/bin/hysteria /usr/local/bin/hy
     rm -f /etc/systemd/system/hysteria.service
-    green "Hysteria 卸载完成！"
+    green "Hysteria 已彻底卸载完成！"
 }
 
 check_status(){
     if [[ -n $(service hysteria status 2>/dev/null | grep "inactive") ]]; then
-        status="${RED}Hysteria 未启动！${PLAIN}"
+        status="${RED}未启动${PLAIN}"
     elif [[ -n $(service hysteria status 2>/dev/null | grep "active") ]]; then
-        status="${GREEN}Hysteria 已启动！${PLAIN}"
+        status="${GREEN}已启动${PLAIN}"
     else
-        status="${RED}未安装 Hysteria！${PLAIN}"
+        status="${RED}未安装${PLAIN}"
     fi
 }
 
