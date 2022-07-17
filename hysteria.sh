@@ -100,8 +100,8 @@ downloadHysteria() {
 }
 
 makeConfig() {
-    read -rp "请输入 Hysteria 的连接端口（默认：40000）：" PORT
-    [[ -z $PORT ]] && PORT=40000
+    read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " PORT
+    [[ -z $PORT ]] && PORT=$(shuf -i 1000-65535 -n 1)
     if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
         until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; do
             if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
