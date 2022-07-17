@@ -391,12 +391,13 @@ menu() {
     echo -e "  ${GREEN}8.${PLAIN}  启用IPv6"
     echo -e "  ${GREEN}9.${PLAIN}  禁用IPv6"
     echo -e "  ${GREEN}10.${PLAIN} 放行防火墙端口"
+    echo -e "  ${GREEN}11.${PLAIN} 修改 Hysteria IP优先级"
     echo " -------------"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo ""
     echo -e "Hysteria 状态：$status"
     echo ""
-    read -rp " 请选择操作[0-9]：" answer
+    read -rp " 请选择操作 [0-11] ：" answer
     case $answer in
         1) installHysteria ;;
         2) uninstall ;;
