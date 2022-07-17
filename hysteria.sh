@@ -116,7 +116,7 @@ makeConfig() {
     ulimit -n 1048576 && ulimit -u unlimited
     openssl ecparam -genkey -name prime256v1 -out /etc/hysteria/private.key
     openssl req -new -x509 -days 36500 -key /etc/hysteria/private.key -out /etc/hysteria/cert.crt -subj "/CN=www.baidu.com"
-    cat <<EOF > /etc/hysteria/hy-server.json
+    cat <<EOF > /etc/hysteria/config.json
 {
     "listen": ":${PORT}",
     "resolve_preference": "46",
@@ -178,7 +178,7 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=/etc/hysteria
-ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/hy-server.json server
+ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/config.json server
 Restart=always
 TEXT
     url="hysteria://$IP:$PORT?auth=$OBFS&upmbps=200&downmbps=1000&obfs=xplus&obfsParam=$OBFS"
