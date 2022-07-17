@@ -169,7 +169,7 @@ EOF
 EOF
     cat <<'TEXT' > /etc/systemd/system/hysteria.service
 [Unit]
-Description=Hysiteria Server
+Description=Hysiteria Server Service
 After=network.target
 
 [Install]
