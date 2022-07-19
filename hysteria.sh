@@ -98,13 +98,16 @@ downloadHysteria() {
     rm -f /usr/local/bin/hysteria
     rm -rf /etc/hysteria
     mkdir /etc/hysteria
-    last_version=$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
-    if [[ ! -n "$last_version" ]]; then
-        red "检测 Hysteria 版本失败，可能是网络问题，请稍后再试"
-        exit 1
+    last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    if [[ -z $last_version ]]; then
+        last_version=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
+        if [[ -z $last_version ]]; then
+            red "检测 Hysteria 版本失败，可能是网络问题，请稍后再试"
+            exit 1
+        fi
     fi
     yellow "检测到 Hysteria 最新版本：${last_version}，开始安装"
-    wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/v${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
+    wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
     if [[ $? -ne 0 ]]; then
         red "下载 Hysteria 失败，请确保你的服务器能够连接并下载 Github 的文件"
         exit 1
@@ -237,7 +240,7 @@ installBBR() {
     fi
 }
 
-installHysteria() {
+install_hysteria() {
     install_base
     wgcfv6status=$(curl -s6m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2) 
     wgcfv4status=$(curl -s4m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
@@ -303,7 +306,7 @@ view_log(){
     service hysteria status
 }
 
-uninstall(){
+uninstall_hysteria(){
     systemctl stop hysteria
     systemctl disable hysteria
     rm -rf /etc/hysteria
@@ -428,8 +431,8 @@ menu() {
     echo ""
     read -rp " 请选择操作 [0-11] ：" answer
     case $answer in
-        1) installHysteria ;;
-        2) uninstall ;;
+        1) install_hysteria ;;
+        2) uninstall_hysteria ;;
         3) start_hysteria ;;
         4) restart_hysteria ;;
         5) stop_hysteria ;;
@@ -450,8 +453,8 @@ fi
 
 if [[ $# > 0 ]]; then
     case $1 in
-        install ) installHysteria ;;
-        uninstall ) uninstall ;;
+        install ) install_hysteria ;;
+        uninstall ) uninstall_hysteria ;;
         update ) update_hysteria ;;
         on ) start_hysteria ;;
         off ) stop_hysteria ;;
