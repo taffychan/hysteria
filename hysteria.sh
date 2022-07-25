@@ -91,7 +91,7 @@ install_base() {
     if [[ $SYSTEM != "CentOS" ]]; then
         ${PACKAGE_UPDATE[int]}
     fi
-    ${PACKAGE_INSTALL[int]} wget curl sudo
+    ${PACKAGE_INSTALL[int]} wget curl sudo python3
 }
 
 downloadHysteria() {
