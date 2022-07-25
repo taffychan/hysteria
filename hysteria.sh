@@ -459,7 +459,7 @@ menu() {
     echo ""
     echo -e "Hysteria 状态：$status"
     echo ""
-    read -rp " 请选择操作 [0-11] ：" answer
+    read -rp " 请选择操作 [0-12] ：" answer
     case $answer in
         1) install_hysteria ;;
         2) uninstall_hysteria ;;
