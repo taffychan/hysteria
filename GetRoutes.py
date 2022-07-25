@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 import re
 import urllib.request
-from datetime import date,datetime
+from datetime import date, datetime
 
 start = datetime.now()
 print(f'{date.today().strftime("%B %d, %Y")},Loading...\n')
@@ -23,7 +23,7 @@ domain_proxy = urllib.request.urlopen(
 a = re.compile(r'([a-z]|[0-9]|[A-Z])(.*[a-z]|[A-Z])')
 
 with open('routes.acl', 'w') as f:
-    f.write('# Author:github.com/A1-hub\n# hysteria acl routes\n# Generated on %s\n\n' %
+    f.write('# Author: github.com/A1-hub\n# hysteria acl routes\n# Generated on %s\n\n' %
             date.today().strftime("%B %d, %Y"))
     sumc = 0
 
