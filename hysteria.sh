@@ -400,9 +400,10 @@ change_port(){
             fi
         done
     fi
-    sed -i "4s/$currPort/:$newPort/g" /etc/hysteria/config.json
-    sed -i "4s/$currPort/:$newPort/g" /root/hy-client.json
-    sed -i "4s/$currPort/:$newPort/g" /root/acl/hy-v2rayn.json
+    nePort=":${newPort}"
+    sed -i "s/$currPort/$nePort/g" /etc/hysteria/config.json
+    sed -i "s/$currPort/$nePort/g" /root/hy-client.json
+    sed -i "s/$currPort/$nePort/g" /root/acl/hy-v2rayn.json
     rm -f hy-url.txt
     check_ip
     OBFS=$(cat /etc/hysteria/config.json 2>/dev/null | grep obfs | awk '{print $2}' | awk -F '"' '{ print $2}')
