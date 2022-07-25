@@ -390,13 +390,13 @@ change_resolve(){
 change_port(){
     currPort=$(cat /etc/hysteria/config.json 2>/dev/null | grep listen | awk '{print $2}' | awk -F '"' '{ print $2}')
     read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " newPort
-    [[ -z $PORT ]] && newPort=$(shuf -i 1000-65535 -n 1)
+    [[ -z $newPort ]] && newPort=$(shuf -i 1000-65535 -n 1)
     if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$newPort") ]]; then
         until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$newPort") ]]; do
             if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$newPort") ]]; then
                 yellow "你设置的端口目前已被其他程序占用，请重新设置一个新的端口"
                 read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " newPort
-                [[ -z $PORT ]] && newPort=$(shuf -i 1000-65535 -n 1)
+                [[ -z $newPort ]] && newPort=$(shuf -i 1000-65535 -n 1)
             fi
         done
     fi
