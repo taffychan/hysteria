@@ -411,6 +411,7 @@ change_port(){
     echo ${url} > /root/hy-url.txt
     systemctl restart hysteria
     green "Hysteria 端口更改为：${newPort} 成功！"
+    yellow "配置文件已更新，请重新在客户端导入节点链接或配置文件"
 }
 
 show_usage(){
