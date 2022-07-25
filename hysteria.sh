@@ -164,6 +164,7 @@ EOF
     }
 }
 EOF
+    cd /root/acl
     wget -N https://raw.githubusercontent.com/taffychan/hysteria/main/GetRoutes.py
     python3 GetRoutes.py
     rm -f GetRoutes.py
