@@ -408,6 +408,8 @@ change_port(){
     OBFS=$(cat /etc/hysteria/config.json 2>/dev/null | grep obfs | awk '{print $2}' | awk -F '"' '{ print $2}')
     url="hysteria://${IP}:${newPort}?auth=${OBFS}&upmbps=1000&downmbps=1000&obfs=xplus&obfsParam=${OBFS}"
     echo ${url} > /root/hy-url.txt
+    systemctl restart hysteria
+    green "Hysteria 端口更改为：${newPort} 成功！"
 }
 
 show_usage(){
@@ -448,7 +450,9 @@ menu() {
     echo -e "  ${GREEN}8.${PLAIN}  启用IPv6"
     echo -e "  ${GREEN}9.${PLAIN}  禁用IPv6"
     echo -e "  ${GREEN}10.${PLAIN} 放行防火墙端口"
+    echo " -------------"
     echo -e "  ${GREEN}11.${PLAIN} 修改 Hysteria IP优先级"
+    echo -e "  ${GREEN}12.${PLAIN} 修改 Hysteria 连接端口"
     echo " -------------"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo ""
@@ -467,6 +471,7 @@ menu() {
         9) closeipv6 ;;
         10) open_ports ;;
         11) change_resolve ;;
+        12) change_port ;;
         *) red "请选择正确的操作！" && exit 1 ;;
     esac
 }
