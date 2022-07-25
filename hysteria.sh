@@ -374,6 +374,15 @@ net.ipv6.conf.lo.disable_ipv6 = 0" >>/etc/sysctl.d/99-sysctl.conf
     green "开启IPv6结束，可能需要重启VPS系统！"
 }
 
+update_v2rule(){
+    cd /root/acl
+    rm -f Country.mmdb routes.acl
+    wget -N https://raw.githubusercontent.com/taffychan/hysteria/main/GetRoutes.py
+    python3 GetRoutes.py
+    rm -f GetRoutes.py
+    green "V2rayN 规则已更新完成！"
+}
+
 change_resolve(){
     currResolve=$(cat /etc/hysteria/config.json 2>/dev/null | grep resolve_preference | awk '{print $2}' | awk -F '"' '{ print $2}')
     yellow "请选择IP优先级："
@@ -471,6 +480,7 @@ menu() {
         6) update_hysteria ;;
         7) change_resolve ;;
         8) change_port ;;
+        9) update_v2rule ;;
         10) view_log ;;
         11) openipv6 ;;
         12) closeipv6 ;;
