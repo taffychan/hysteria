@@ -447,14 +447,15 @@ menu() {
     echo -e "  ${GREEN}5.${PLAIN}  停止 Hysieria"
     echo -e "  ${GREEN}6.${PLAIN}  更新 Hysieria 内核"
     echo " -------------"
-    echo -e "  ${GREEN}7.${PLAIN}  查看 Hysieria 运行日志"
+    echo -e "  ${GREEN}7.${PLAIN}  修改 Hysteria IP优先级"
+    echo -e "  ${GREEN}8.${PLAIN}  修改 Hysteria 连接端口"
+    echo -e "  ${GREEN}9.${PLAIN}  更新 V2rayN 入站规则"
     echo " -------------"
-    echo -e "  ${GREEN}8.${PLAIN}  启用IPv6"
-    echo -e "  ${GREEN}9.${PLAIN}  禁用IPv6"
-    echo -e "  ${GREEN}10.${PLAIN} 放行防火墙端口"
+    echo -e "  ${GREEN}10.${PLAIN}  查看 Hysieria 运行日志"
     echo " -------------"
-    echo -e "  ${GREEN}11.${PLAIN} 修改 Hysteria IP优先级"
-    echo -e "  ${GREEN}12.${PLAIN} 修改 Hysteria 连接端口"
+    echo -e "  ${GREEN}11.${PLAIN}  启用IPv6"
+    echo -e "  ${GREEN}12.${PLAIN}  禁用IPv6"
+    echo -e "  ${GREEN}13.${PLAIN}  放行防火墙端口"
     echo " -------------"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo ""
@@ -468,12 +469,12 @@ menu() {
         4) restart_hysteria ;;
         5) stop_hysteria ;;
         6) update_hysteria ;;
-        7) view_log ;;
-        8) openipv6 ;;
-        9) closeipv6 ;;
-        10) open_ports ;;
-        11) change_resolve ;;
-        12) change_port ;;
+        7) change_resolve ;;
+        8) change_port ;;
+        10) view_log ;;
+        11) openipv6 ;;
+        12) closeipv6 ;;
+        13) open_ports ;;
         *) red "请选择正确的操作！" && exit 1 ;;
     esac
 }
