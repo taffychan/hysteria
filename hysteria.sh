@@ -96,7 +96,7 @@ install_base() {
 
 downloadHysteria() {
     rm -f /usr/local/bin/hysteria
-    rm -rf /etc/hysteria
+    rm -rf /etc/hysteria /root/acl
     mkdir /etc/hysteria
     last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -z $last_version ]]; then
@@ -116,6 +116,7 @@ downloadHysteria() {
 }
 
 makeConfig() {
+    mkdir /root/acl
     read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " PORT
     [[ -z $PORT ]] && PORT=$(shuf -i 1000-65535 -n 1)
     if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
@@ -163,7 +164,10 @@ EOF
     }
 }
 EOF
-    cat <<EOF > /root/hy-v2rayn.json
+    wget -N https://raw.githubusercontent.com/taffychan/hysteria/main/GetRoutes.py
+    python3 GetRoutes.py
+    rm -f GetRoutes.py
+    cat <<EOF > /root/acl/hy-v2rayn.json
 {
     "server": "${IP}:${PORT}",
     "obfs": "${OBFS}",
@@ -266,7 +270,7 @@ install_hysteria() {
         show_usage
         green "Hysteria 服务器安装成功"
         yellow "Hysteria 官方客户端配置文件已保存到 /root/hy-client.json"
-        yellow "V2rayN 客户端规则配置文件已保存到 /root/hy-v2rayn.json"
+        yellow "V2rayN 客户端规则配置文件已保存到 /root/acl 文件夹中"
         yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt 文件中"
         green "$url"
     fi
