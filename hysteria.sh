@@ -98,13 +98,10 @@ downloadHysteria() {
     rm -f /usr/local/bin/hysteria
     rm -rf /etc/hysteria /root/acl
     mkdir /etc/hysteria
-    last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') || last_version=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -z $last_version ]]; then
-        last_version=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
-        if [[ -z $last_version ]]; then
-            red "检测 Hysteria 版本失败，可能是网络问题，请稍后再试"
-            exit 1
-        fi
+        red "检测 Hysteria 版本失败，可能是网络问题，请稍后再试"
+        exit 1
     fi
     yellow "检测到 Hysteria 最新版本：${last_version}，开始安装"
     wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
@@ -293,14 +290,14 @@ restart_hysteria(){
 }
 
 update_hysteria(){
-    latestVer=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
-    localVer=$(/usr/local/bin/hysteria -v | awk 'NR==1 {print $3}')
-    if [[ $latestVer == $localVer ]]; then
-        red "您当前运行的 Hysteria 内核为最新版本，不必再次更新！"
+    last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') || last_version=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
+    local_version=$(/usr/local/bin/hysteria -v | awk 'NR==1 {print $3}')
+    if [[ $last_version == $local_version ]]; then
+        red "您当前运行的 Hysteria 内核为官方最新版本，不必再次更新！"
     else
         systemctl stop hysteria
         rm -f /usr/local/bin/hysteria
-        wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/v${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
+        wget -N --no-check-certificate https://github.com/HyNetwork/Hysteria/releases/download/${last_version}/Hysteria-tun-linux-$(archAffix) -O /usr/local/bin/hysteria
         chmod +x /usr/local/bin/hysteria
         systemctl start hysteria
         green "Hysteria 内核已更新到最新版本！"
