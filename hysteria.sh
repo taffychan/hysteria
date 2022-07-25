@@ -148,7 +148,7 @@ EOF
 {
     "server": "${IP}:${PORT}",
     "obfs": "${OBFS}",
-    "up_mbps": 200,
+    "up_mbps": 1000,
     "down_mbps": 1000,
     "insecure": true,
     "socks5": {
@@ -167,7 +167,7 @@ EOF
 {
     "server": "${IP}:${PORT}",
     "obfs": "${OBFS}",
-    "up_mbps": 200,
+    "up_mbps": 1000,
     "down_mbps": 1000,
     "insecure": true,
     "acl": "acl/routes.acl",
@@ -200,7 +200,7 @@ WorkingDirectory=/etc/hysteria
 ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/config.json server
 Restart=always
 TEXT
-    url="hysteria://${IP}:${PORT}?auth=${OBFS}&upmbps=200&downmbps=1000&obfs=xplus&obfsParam=${OBFS}"
+    url="hysteria://${IP}:${PORT}?auth=${OBFS}&upmbps=1000&downmbps=1000&obfs=xplus&obfsParam=${OBFS}"
     echo ${url} > /root/hy-url.txt
 }
 
