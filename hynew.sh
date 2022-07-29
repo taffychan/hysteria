@@ -162,15 +162,25 @@ EOF
 }
 EOF
     cat <<EOF > /root/hy-clash.yaml
+mixed-port: 7890
+tcp-concurrent: true         #【Meta专属】TCP连接并发，如果域名解析结果对应多个IP，
+allow-lan: false                  #允许局域网连接(false/true)
+bind-address:                     #监听IP白名单（当allow-lan：true），只允许列表设备
+  '*'  
+mode: rule                 #clash工作模式（rule/global/direct,meta暂不支持script）
+
+log-level: info            #日志等级（info/warning/error/debug/silent）
+
+ipv6: true
 proxies:
  - name: Hysteria
    type: hysteria
    server: "${IP}"
-   port: 24321
-   obfs: 68aadf1ba73819**********
+   port: ${PORT}
+   obfs: ${OBFS}
    protocol: udp
-   up: 20 #默认为Mbps
-   down: 100
+   up: 1000
+   down: 1000
    skip-cert-verify: true
 EOF
     cd /root/acl
