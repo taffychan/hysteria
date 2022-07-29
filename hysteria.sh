@@ -169,46 +169,46 @@ mode: Rule
 log-level: info
 external-controller: :9090
 proxies:
-  - {name: "歇斯底里 Hysteria", type: hysteria, server: ${IP}, port: ${PORT}, obfs: ${OBFS}, protocol: udp, up: 1000, down: 1000, skip-cert-verify: true}
+  - {name: "Hysteria Node", type: hysteria, server: ${IP}, port: ${PORT}, obfs: ${OBFS}, protocol: udp, up: 1000, down: 1000, skip-cert-verify: true}
 proxy-groups:
   - name: 🚀 节点选择
     type: select
     proxies:
       - ♻️ 自动选择
       - DIRECT
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: ♻️ 自动选择
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
     proxies:
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: 🌍 国外媒体
     type: select
     proxies:
       - 🚀 节点选择
       - ♻️ 自动选择
       - 🎯 全球直连
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: 📲 电报信息
     type: select
     proxies:
       - 🚀 节点选择
       - 🎯 全球直连
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: Ⓜ️ 微软服务
     type: select
     proxies:
       - 🎯 全球直连
       - 🚀 节点选择
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: 🍎 苹果服务
     type: select
     proxies:
       - 🚀 节点选择
       - 🎯 全球直连
-      - 歇斯底里 Hysteria
+      - Hysteria Node
   - name: 🎯 全球直连
     type: select
     proxies:
@@ -231,7 +231,7 @@ proxy-groups:
       - 🚀 节点选择
       - 🎯 全球直连
       - ♻️ 自动选择
-      - 歇斯底里 Hysteria
+      - Hysteria Node
 rules:
  - DOMAIN-SUFFIX,acl4.ssr,🎯 全球直连
  - DOMAIN-SUFFIX,ip6-localhost,🎯 全球直连
