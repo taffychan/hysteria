@@ -162,16 +162,121 @@ EOF
 }
 EOF
     cat <<EOF > /root/hy-clash.yaml
-mixed-port: 7890
+# port: 7890                 #本地http代理端口
+# socks-port: 7891           #本地socks5代理端口
+mixed-port: 7890             #本地混合代理(http和socks5合并）端口
+# redir-port: 7892           #本地Linux/macOS Redir代理端口
+# tproxy-port: 7893          #本地Linux Tproxy代理端口
+
+# authentication:            # 本地SOCKS5/HTTP(S)代理端口认证设置
+#  - "user1:pass1"
+#  - "user2:pass2"
+
+# geodata-mode: true         #【Meta专属】使用geoip.dat数据库(默认：false使用mmdb数据库)
 tcp-concurrent: true         #【Meta专属】TCP连接并发，如果域名解析结果对应多个IP，
+                             # 并发所有IP，选择握手最快的IP进行连接
+
 allow-lan: false                  #允许局域网连接(false/true)
 bind-address:                     #监听IP白名单（当allow-lan：true），只允许列表设备
-  '*'  
+  '*'                             #全部设备
+  # 192.168.122.11                #单个ip4地址
+  # "[aaaa::a8aa:ff:fe09:57d8]"   #单个ip6地址
+  
 mode: rule                 #clash工作模式（rule/global/direct,meta暂不支持script）
 
 log-level: info            #日志等级（info/warning/error/debug/silent）
 
-ipv6: true
+ipv6: false                #ip6开关，当为false时，停止解析hostanmes为ip6地址
+
+external-controller: 127.0.0.1:9090   #控制器监听地址
+external-ui: folder                   #http服务路径，可以放静态web网页，如yacd的控制面板
+                                      #可通过`http://{{external-controller}}/ui`直接使用
+# secret: ""                          #控制器登录密码
+
+
+interface-name: en0        #出口网卡名称
+routing-mark: 6666         #流量标记(仅Linux)
+
+profile:                   #缓存设置(文件位置./cache.db)
+  store-selected: false    #节点状态记忆（若不同配置有同代理名称,设置值共享）
+  store-fake-ip: true      #fake-ip缓存
+  
+sniffer:                         #【Meta专属】sniffer域名嗅探器
+  enable: true                   #嗅探开关
+  sniffing:                      #嗅探协议对象：目前支持tls/http
+    - tls
+    - http
+  skip-domain:                   #列表中的sni字段，保留mapping结果，不通过嗅探还原域名
+                                 #优先级比force-domain高
+    - 'Mijia Cloud'              #米家设备，建议加
+    - 'dlg.io.mi.com'
+    - '+.apple.com'              #苹果域名，建议加
+  # - '*.baidu.com'              #支持通配符
+    
+  force-domain:                  #需要强制嗅探的域名，默认只对IP嗅探
+  # - '+'                        #去掉注释后等于全局嗅探
+    - 'google.com'
+    
+  #port-whitelist:               #端口白名单，只对名单内的端口进行还原域名
+  # - 80
+  # - 443
+  # - 8000-9000
+
+hosts:                           #host，支持通配符（非通配符域名优先级高于通配符域名）
+  # '*.clash.dev': 127.0.0.1     #例如foo.example.com>*.example.com>.example.com
+  # '.dev': 127.0.0.1
+  # 'alpha.clash.dev': '::1'
+dns:
+  enable: true                 #DNS开关(false/true)
+  listen: 0.0.0.0:53           #DNS监听地址
+  # ipv6: false                #IP6解析开关；如果为false，将返回ip6结果为空
+  
+  default-nameserver:          #解析非IP的dns用的dns服务器,只支持纯IP
+    - 114.114.114.114
+    - 8.8.8.8
+    
+  #nameserver-policy:                #指定域名使用自定义DNS解析
+  # 'www.baidu.com': 'https://223.5.5.5/dns-query'
+  # '+.internal.crop.com': '114.114.114.114'
+  
+  enhanced-mode: redir-host          #DNS模式(redir-host/fake-ip)
+                                     #【Meta专属】redir-host传递域名，可远程解析
+  fake-ip-range: 198.18.0.1/16       #Fake-IP解析地址池
+  # use-hosts: true                  #查询hosts配置并返回真实IP
+  
+  # fake-ip-filter:                  #Fake-ip过滤，列表中的域名返回真实ip
+  #   - '*.lan'
+  #   - '*.linksys.com'
+  #   - '+.pool.ntp.org'
+  #   - localhost.ptlogin2.qq.com
+  
+  #proxy-server-nameserver:          #【Meta专属】解析代理服务器域名的dns
+  # - tls://1.0.0.1:853              # 不写时用nameserver解析
+
+  nameserver:                        #默认DNS服务器，支持udp/tcp/dot/doh/doq
+    - 114.114.114.114
+    - https://doh.pub/dns-query
+    - tls://101.101.101.101:853
+  # - dhcp://en0                     #dns from dhcp
+    
+  fallback:                          #回落DNS服务器，支持udp/tcp/dot/doh/doq
+    - https://doh.dns.sb/dns-query
+    - tcp://208.67.222.222:443
+    - quic://a.passcloud.xyz:784     #【Meta专属】Dns over quic
+    - 'tls://8.8.4.4:853#DNSg'       #【Meta专属】"#DNSg"代表该DNS服务器通过
+                                     # 名为"DNSg"的proxy Group访问
+                                     
+  fallback-filter:                   #回落DNS服务器过滤
+    geoip: true                      #为真时，不匹配为geoip规则的使用fallback返回结果
+    geoip-code: CN                   #geoip匹配区域设定
+    geosite:                         #【Meta专属】设定geosite某分类使用fallback返回结果
+      - gfw
+    ipcidr:                          #列表中的ip使用fallback返回解析结果
+      - 240.0.0.0/4
+    domain:                          #列表中的域名使用fallback返回解析结果
+      - '+.google.com'
+      - '+.facebook.com'
+      - '+.youtube.com'
 proxies:
  - name: Hysteria
    type: hysteria
