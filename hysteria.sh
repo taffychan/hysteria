@@ -3650,6 +3650,7 @@ install_hysteria() {
         show_usage
         green "Hysteria 服务器安装成功"
         yellow "Hysteria 官方客户端配置文件已保存到 /root/hy-client.json"
+        yellow "Clash Meta 客户端配置文件已保存到 /root/hy-clash.yaml"
         yellow "V2rayN 客户端规则配置文件已保存到 /root/acl 文件夹中"
         yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt 文件中"
         green "$url"
