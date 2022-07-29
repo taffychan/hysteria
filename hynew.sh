@@ -161,6 +161,18 @@ EOF
     }
 }
 EOF
+    cat <<EOF > /root/hy-clash.yaml
+proxies:
+ - name: Hysteria
+   type: hysteria
+   server: "${IP}"
+   port: 24321
+   obfs: 68aadf1ba73819**********
+   protocol: udp
+   up: 20 #默认为Mbps
+   down: 100
+   skip-cert-verify: true
+EOF
     cd /root/acl
     wget -N https://raw.githubusercontent.com/taffychan/hysteria/main/GetRoutes.py
     python3 GetRoutes.py
