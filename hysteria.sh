@@ -169,7 +169,7 @@ mode: Rule
 log-level: info
 external-controller: :9090
 proxies:
-  - {name: "歇斯底里 Hysteria", type: hysteria, server: ${IP}, port: ${PORT}, obfs: "${OBFS}", protocol: udp, up: 1000, down: 1000, skip-cert-verify: true}
+  - {name: "歇斯底里 Hysteria", type: hysteria, server: ${IP}, port: ${PORT}, obfs: ${OBFS}, protocol: udp, up: 1000, down: 1000, skip-cert-verify: true}
 proxy-groups:
   - name: 🚀 节点选择
     type: select
