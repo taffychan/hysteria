@@ -3693,9 +3693,8 @@ view_log(){
 uninstall_hysteria(){
     systemctl stop hysteria
     systemctl disable hysteria
-    rm -rf /etc/hysteria
-    rm -f /usr/local/bin/hysteria /usr/local/bin/hy
-    rm -f /etc/systemd/system/hysteria.service
+    rm -rf /etc/hysteria /root/acl
+    rm -f /root/hy-clash.yaml /root/hy-url.txt /root/hy-client.json /usr/local/bin/hysteria /usr/local/bin/hy /etc/systemd/system/hysteria.service
     green "Hysteria 已彻底卸载完成！"
 }
 
