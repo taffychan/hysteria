@@ -3641,8 +3641,8 @@ install_hysteria() {
         installBBR
     fi
     makeConfig
+    systemctl start hysteria   
     systemctl enable hysteria
-    systemctl start hysteria
     check_status
     if [[ -n $(service hysteria status 2>/dev/null | grep "inactive") ]]; then
         red "Hysteria 服务器安装失败"
