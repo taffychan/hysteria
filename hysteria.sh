@@ -3587,7 +3587,7 @@ ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/config.json server
 Restart=always
 TEXT
     url="hysteria://${IP}:${PORT}?auth=${OBFS}&upmbps=1000&downmbps=1000&obfs=xplus&obfsParam=${OBFS}"
-    echo ${url} > /root/hy-url.txt
+    echo ${url} > /root/hy/hy-url.txt
 }
 
 installBBR() {
@@ -3653,8 +3653,8 @@ install_hysteria() {
         green "Hysteria 服务器安装成功"
         yellow "Hysteria 官方客户端配置文件已保存到 /root/hy/hy-client.json"
         yellow "Clash Meta 客户端配置文件已保存到 /root/hy/hy-clash.yaml"
-        yellow "V2rayN 客户端规则配置文件已保存到 /root/hy/acl 文件夹中"
-        yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt 文件中"
+        yellow "V2rayN 客户端规则及配置文件已保存到 /root/hy/acl 文件夹中"
+        yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy/hy-url.txt 文件中"
         green "$url"
     fi
 }
@@ -3869,7 +3869,7 @@ menu() {
         11) openipv6 ;;
         12) closeipv6 ;;
         13) open_ports ;;
-        *) red "请输入正确的选项 [0-13[！" && exit 1 ;;
+        *) red "请输入正确的选项 [0-13]！" && exit 1 ;;
     esac
 }
 
