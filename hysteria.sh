@@ -96,7 +96,7 @@ install_base() {
 
 downloadHysteria() {
     rm -f /usr/local/bin/hysteria
-    rm -rf /etc/hysteria /root/acl
+    rm -rf /etc/hysteria /root/hy /root/hy/acl
     mkdir /etc/hysteria
     last_version=$(curl -Ls "https://api.github.com/repos/HyNetwork/Hysteria/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') || last_version=v$(curl -Ls "https://data.jsdelivr.com/v1/package/resolve/gh/HyNetwork/Hysteria" | grep '"version":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -z $last_version ]]; then
@@ -113,7 +113,7 @@ downloadHysteria() {
 }
 
 makeConfig() {
-    mkdir /root/acl
+    mkdir /root/hy /root/hy/acl
     read -rp "请输入 Hysteria 的连接端口 [默认随机生成]: " PORT
     [[ -z $PORT ]] && PORT=$(shuf -i 1000-65535 -n 1)
     if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$PORT") ]]; then
@@ -144,7 +144,7 @@ makeConfig() {
     "obfs": "${OBFS}"
 }
 EOF
-    cat <<EOF > /root/hy-client.json
+    cat <<EOF > /root/hy/hy-client.json
 {
     "server": "${IP}:${PORT}",
     "obfs": "${OBFS}",
@@ -163,7 +163,7 @@ EOF
     }
 }
 EOF
-    cat <<EOF > /root/hy-clash.yaml
+    cat <<EOF > /root/hy/hy-clash.yaml
 port: 7890
 socks-port: 7891
 allow-lan: true
@@ -3545,11 +3545,11 @@ rules:
  - GEOIP,CN,🎯 全球直连
  - MATCH,🐟 漏网之鱼
 EOF
-    cd /root/acl
+    cd /root/hy/acl
     wget -N https://raw.githubusercontent.com/taffychan/hysteria/main/GetRoutes.py
     python3 GetRoutes.py
     rm -f GetRoutes.py
-    cat <<EOF > /root/acl/hy-v2rayn.json
+    cat <<EOF > /root/hy/acl/hy-v2rayn.json
 {
     "server": "${IP}:${PORT}",
     "obfs": "${OBFS}",
@@ -3651,9 +3651,9 @@ install_hysteria() {
     elif [[ -n $(service hysteria status 2>/dev/null | grep "active") ]]; then
         show_usage
         green "Hysteria 服务器安装成功"
-        yellow "Hysteria 官方客户端配置文件已保存到 /root/hy-client.json"
-        yellow "Clash Meta 客户端配置文件已保存到 /root/hy-clash.yaml"
-        yellow "V2rayN 客户端规则配置文件已保存到 /root/acl 文件夹中"
+        yellow "Hysteria 官方客户端配置文件已保存到 /root/hy/hy-client.json"
+        yellow "Clash Meta 客户端配置文件已保存到 /root/hy/hy-clash.yaml"
+        yellow "V2rayN 客户端规则配置文件已保存到 /root/hy/acl 文件夹中"
         yellow "SagerNet / ShadowRocket 分享链接如下，并保存至 /root/hy-url.txt 文件中"
         green "$url"
     fi
@@ -3696,8 +3696,8 @@ view_log(){
 uninstall_hysteria(){
     systemctl stop hysteria
     systemctl disable hysteria
-    rm -rf /etc/hysteria /root/acl
-    rm -f /root/hy-clash.yaml /root/hy-url.txt /root/hy-client.json /usr/local/bin/hysteria /usr/local/bin/hy /etc/systemd/system/hysteria.service
+    rm -rf /etc/hysteria /root/hy/acl /root/hy
+    rm -f /usr/local/bin/hysteria /usr/local/bin/hy /etc/systemd/system/hysteria.service
     green "Hysteria 已彻底卸载完成！"
 }
 
@@ -3854,7 +3854,7 @@ menu() {
     echo ""
     echo -e "Hysteria 状态：$status"
     echo ""
-    read -rp " 请选择操作 [0-12] ：" answer
+    read -rp " 请输入选项 [0-13] ：" answer
     case $answer in
         1) install_hysteria ;;
         2) uninstall_hysteria ;;
@@ -3869,7 +3869,7 @@ menu() {
         11) openipv6 ;;
         12) closeipv6 ;;
         13) open_ports ;;
-        *) red "请选择正确的操作！" && exit 1 ;;
+        *) red "请输入正确的选项 [0-13[！" && exit 1 ;;
     esac
 }
 
